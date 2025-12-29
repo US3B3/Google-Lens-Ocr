@@ -1,0 +1,7 @@
+{
+  "name": "Gemini Lens OCR",
+  "description": "A sophisticated OCR application that uses Gemini's multi-modal capabilities to extract text from images and automatically correct errors with AI reasoning.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

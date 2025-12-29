@@ -1,11 +1,28 @@
-<div align="center">
 
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
+# Gemini Lens OCR
 
-  <h1>Built with AI Studio</h2>
+Akıllı, Gemini destekli OCR ve doküman düzenleyici.
 
-  <p>The fastest path from prompt to production with Gemini.</p>
+## Kurulum
 
-  <a href="https://aistudio.google.com/apps">Start building</a>
+1. Bağımlılıkları yükleyin:
+   ```bash
+   npm install
+   ```
 
-</div>
+2. API Anahtarınızı ayarlayın:
+   `.env` dosyası oluşturun ve Gemini API anahtarınızı ekleyin:
+   ```env
+   VITE_API_KEY=your_gemini_api_key_here
+   ```
+
+3. Uygulamayı başlatın:
+   ```bash
+   npm run dev
+   ```
+
+## Özellikler
+- **Görsel & PDF Desteği**: Tekli veya çok sayfalı doküman tarama.
+- **Klasör Tarama**: Bir klasör dolusu dökümanı tek bir metin dosyasına dönüştürün.
+- **Akıllı Düzenleyici**: Gemini tarafından düzeltilen metinleri manuel olarak düzenleyin.
+- **TXT Dışa Aktar**: Sonuçları cihazınıza .txt olarak indirin.

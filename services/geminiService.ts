@@ -2,23 +2,20 @@
 import { GoogleGenAI, Type } from "@google/genai";
 import { OcrResult } from "../types";
 
+// Token-optimized prompt: Concise and direct
 const OCR_PROMPT = `
-You are an expert OCR and document analysis engine.
-1. Perform high-accuracy OCR on the provided document/image to extract all text.
-2. **CRITICAL**: Maintain the original formatting, including paragraph breaks, line spacing, and especially paragraph indentations (paragraf başları). Ensure the output mirrors the structural layout of the source.
-3. Analyze the extracted text for common OCR errors (e.g., '1' vs 'l', '0' vs 'O', spelling mistakes, formatting breaks).
-4. Provide a corrected version of the text that fixes these errors while STRICTLY maintaining the original meaning and paragraph structure.
-5. Identify the specific corrections you made.
-
-Your response MUST be in JSON format matching the provided schema.
+Extract text from the image with high accuracy. 
+Maintain original layout, paragraph breaks, and indentations.
+Correct OCR errors while preserving meaning. 
+Return strictly JSON.
 `;
 
 export const processOcr = async (base64Data: string, mimeType: string): Promise<OcrResult> => {
-  // Use process.env.API_KEY directly as per guidelines
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
   
   const response = await ai.models.generateContent({
-    model: "gemini-3-flash-preview",
+    // Changed to Lite model for maximum token efficiency
+    model: "gemini-flash-lite-latest",
     contents: [
       {
         parts: [
@@ -39,11 +36,11 @@ export const processOcr = async (base64Data: string, mimeType: string): Promise<
         properties: {
           rawText: {
             type: Type.STRING,
-            description: "The initial raw text extracted from the image before correction.",
+            description: "Initial raw extraction.",
           },
           correctedText: {
             type: Type.STRING,
-            description: "The polished and error-corrected version of the extracted text with preserved paragraph starts.",
+            description: "Corrected text with preserved structure.",
           },
           corrections: {
             type: Type.ARRAY,
@@ -57,14 +54,8 @@ export const processOcr = async (base64Data: string, mimeType: string): Promise<
               required: ["original", "fixed", "reason"],
             },
           },
-          language: {
-            type: Type.STRING,
-            description: "The primary detected language of the text.",
-          },
-          confidence: {
-            type: Type.NUMBER,
-            description: "Confidence score from 0 to 1.",
-          },
+          language: { type: Type.STRING },
+          confidence: { type: Type.NUMBER },
         },
         required: ["rawText", "correctedText", "corrections", "language"],
       },
@@ -73,7 +64,7 @@ export const processOcr = async (base64Data: string, mimeType: string): Promise<
 
   const jsonStr = response.text;
   if (!jsonStr) {
-    throw new Error("No response received from Gemini");
+    throw new Error("No response from Gemini");
   }
 
   return JSON.parse(jsonStr) as OcrResult;

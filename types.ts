@@ -14,23 +14,25 @@ export interface OcrResult {
 }
 
 export interface BatchItem {
+  id: string;
   name: string;
-  result: OcrResult | null;
-  status: 'pending' | 'processing' | 'completed' | 'error';
+  data: string; // base64 representation
+  type: string;
 }
 
 export interface AppState {
-  // Single file mode
   fileData: string | null;
   fileType: string | null;
   
-  // Batch mode
   isBatchMode: boolean;
-  batchFiles: File[];
+  batchItems: BatchItem[];
   processedCount: number;
-  consolidatedText: string;
   
-  // Editor state
+  currentBatchIndex: number; 
+  totalBatches: number;
+  batchLogs: string[];
+  
+  consolidatedText: string;
   editedText: string;
   
   isLoading: boolean;
